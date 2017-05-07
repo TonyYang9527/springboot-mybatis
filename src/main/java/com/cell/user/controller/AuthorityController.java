@@ -2,7 +2,8 @@ package com.cell.user.controller;
 
 import org.springframework.stereotype.Controller;
 
+
 @Controller
-public class SysPermissionController {
+public class AuthorityController {
 
 }

@@ -40,6 +40,39 @@ public class AuthorityService {
 	}
 
 	/**
+	 * 创建 SysAuthority.
+	 * 
+	 * @param vo
+	 * @return id
+	 */
+	public Long createSysAuthority(SysAuthority authority) {
+		authority.setId(null);
+		sysAuthorityMapper.insertSelective(authority);
+		logger.info("createSysAuthority  authority:{}",
+				JSON.toJSONString(authority));
+		return authority.getId();
+	}
+
+	/**
+	 * 更新 SysAuthority.
+	 * 
+	 * @param activity
+	 * @return
+	 */
+	public boolean updateSysAuthority(SysAuthority authority) {
+
+		SysAuthorityExample example = new SysAuthorityExample();
+		SysAuthorityExample.Criteria c = example.createCriteria();
+		c.andIdEqualTo(authority.getId());
+
+		logger.info("updateSysAuthority  authority:{}",
+				JSON.toJSONString(authority));
+		sysAuthorityMapper.updateByExampleSelective(authority, example);
+
+		return true;
+	}
+
+	/**
 	 * 根据id 删除 SysAuthority.
 	 * 
 	 * @param id

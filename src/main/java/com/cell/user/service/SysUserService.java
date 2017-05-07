@@ -19,7 +19,7 @@ public class SysUserService {
 
 	private Logger logger = LoggerFactory.getLogger(SysUserService.class);
 
-    @Autowired
+	@Autowired
 	protected SysUserMapper sysUserMapper;
 
 	/**
@@ -64,12 +64,13 @@ public class SysUserService {
 				"getSysUserByOther  username:{}, email:{}, mobile:{},users:{}",
 				JSON.toJSONString(username), JSON.toJSONString(email),
 				JSON.toJSONString(mobile), JSON.toJSONString(users));
+
 		if (CollectionUtils.isNotEmpty(users) && users.size() == 1) {
 			return users.get(0);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 根据id 删除 SysUser.
 	 * 

@@ -1,6 +1,9 @@
 package com.cell.user.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -29,7 +32,7 @@ public class SysUserService {
 	 *            the id
 	 * @return SysUser
 	 */
-	public SysUser getSysUserById(Long id) {
+	public SysUser findUserById(Long id) {
 		SysUser user = sysUserMapper.selectByPrimaryKey(id);
 		logger.info("getSysUserById  id:{},user:{}", JSON.toJSONString(id),
 				JSON.toJSONString(user));
@@ -37,6 +40,53 @@ public class SysUserService {
 			return user;
 		}
 		return null;
+	}
+
+	/**
+	 * 创建 SysUser.
+	 * 
+	 * @param req
+	 * @return id
+	 */
+	public Long createSysUser(SysUser user) {
+
+		user.setCreatedTime(new Date());
+		user.setCreatedBy("admin");
+		sysUserMapper.insertSelective(user);
+		logger.info("createSysUser  user:{}", JSON.toJSONString(user));
+		// 后面加入缓存
+		return user.getId();
+	}
+
+	/**
+	 * 根据主键获取 List<SysUser>.
+	 * 
+	 * @param Set
+	 *            <Long> ids
+	 * @return List<SysUser>
+	 */
+	public List<SysUser> findUserByIds(Set<Long> ids) {
+
+		if (CollectionUtils.isEmpty(ids)) {
+			return new ArrayList<SysUser>();
+		}
+
+		SysUserExample example = new SysUserExample();
+		SysUserExample.Criteria c = example.createCriteria();
+
+		List<Long> values = new ArrayList<Long>(ids.size());
+		for (Long id : ids) {
+			values.add(id);
+		}
+		c.andIdIn(values);
+
+		List<SysUser> users = sysUserMapper.selectByExample(example);
+		logger.info("findUserByIds  ids:{},users:{}", JSON.toJSONString(ids),
+				JSON.toJSONString(users));
+		if (CollectionUtils.isEmpty(users)) {
+			return new ArrayList<SysUser>();
+		}
+		return users;
 	}
 
 	/**

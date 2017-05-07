@@ -37,7 +37,7 @@ public class SwaggerController {
         list.add(user);
 
         User user2=new User();
-        user.setName("world");
+        user2.setName("world");
         list.add(user2);
         return list;
     }

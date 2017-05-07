@@ -13,6 +13,7 @@ import com.cell.user.entiy.SysAuthority;
 import com.cell.user.service.AuthorityService;
 
 @Controller
+@RequestMapping(value = "/authority")
 public class AuthorityController {
 	private Logger logger = LoggerFactory.getLogger(AuthorityController.class);
 	@Autowired

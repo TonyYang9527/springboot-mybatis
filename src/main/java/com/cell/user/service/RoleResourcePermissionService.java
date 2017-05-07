@@ -44,6 +44,41 @@ public class RoleResourcePermissionService {
 	}
 
 	/**
+	 * 创建 SysRoleResourcePermission.
+	 * 
+	 * @param req
+	 * @return id
+	 */
+	public Long createSysRoleResourcePermission(
+			SysRoleResourcePermission relation) {
+		sysRoleResourcePermissionMapper.insertSelective(relation);
+		logger.info("createSysRoleResourcePermission  relation:{}",
+				JSON.toJSONString(relation));
+		// 后面加入缓存
+		return relation.getId();
+	}
+
+	/**
+	 * 更新 SysRoleResourcePermission
+	 * 
+	 * @param req
+	 * @return boolean
+	 */
+	public boolean updateSysRoleResourcePermission(
+			SysRoleResourcePermission relation) {
+		SysRoleResourcePermissionExample example = new SysRoleResourcePermissionExample();
+		SysRoleResourcePermissionExample.Criteria c = example.createCriteria();
+		c.andIdEqualTo(relation.getId());
+
+		logger.info("updateSysRoleResourcePermission  relation:{}",
+				JSON.toJSONString(relation));
+		sysRoleResourcePermissionMapper.updateByExampleSelective(relation,
+				example);
+
+		return true;
+	}
+
+	/**
 	 * 根据id 删除 SysRoleResourcePermission.
 	 * 
 	 * @param id

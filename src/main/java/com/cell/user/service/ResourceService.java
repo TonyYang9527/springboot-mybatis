@@ -42,6 +42,38 @@ public class ResourceService {
 	}
 
 	/**
+	 * 创建 SysResource.
+	 * 
+	 * @param req
+	 * @return id
+	 */
+	public Long createSysResource(SysResource resource) {
+		sysResourceMapper.insertSelective(resource);
+		logger.info("createSysResource  resource:{}",
+				JSON.toJSONString(resource));
+		// 后面加入缓存
+		return resource.getId();
+	}
+
+	/**
+	 * 更新 SysResource
+	 * 
+	 * @param req
+	 * @return boolean
+	 */
+	public boolean updateSysResource(SysResource resource) {
+		SysResourceExample example = new SysResourceExample();
+		SysResourceExample.Criteria c = example.createCriteria();
+		c.andIdEqualTo(resource.getId());
+
+		logger.info("updateSysResource  resource:{}",
+				JSON.toJSONString(resource));
+		sysResourceMapper.updateByExampleSelective(resource, example);
+
+		return true;
+	}
+
+	/**
 	 * 根据id 删除 SysResource.
 	 * 
 	 * @param sysPermissionId

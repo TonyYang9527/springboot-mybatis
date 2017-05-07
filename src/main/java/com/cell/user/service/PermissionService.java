@@ -42,6 +42,39 @@ public class PermissionService {
 	}
 
 	/**
+	 * 创建 SysPermission.
+	 * 
+	 * @param req
+	 * @return id
+	 */
+	public Long createSysPermission(SysPermission permission) {
+
+		sysPermissionMapper.insertSelective(permission);
+		logger.info("createSysPermission  authority:{}",
+				JSON.toJSONString(permission));
+		// 后面加入缓存
+		return permission.getId();
+	}
+
+	/**
+	 * 更新 SysPermission
+	 * 
+	 * @param req
+	 * @return boolean
+	 */
+	public boolean updateSysPermission(SysPermission permission) {
+
+		SysPermissionExample example = new SysPermissionExample();
+		SysPermissionExample.Criteria c = example.createCriteria();
+		c.andIdEqualTo(permission.getId());
+		logger.info("updateSysPermission  permission:{}",
+				JSON.toJSONString(permission));
+		sysPermissionMapper.updateByExampleSelective(permission, example);
+
+		return true;
+	}
+
+	/**
 	 * 根据id 删除 SysPermission.
 	 * 
 	 * @param sysPermissionId
@@ -76,7 +109,7 @@ public class PermissionService {
 		List<Long> values = new ArrayList<Long>(ids.size());
 		for (Long id : ids) {
 			values.add(id);
-		 }
+		}
 		criteria.andIdIn(values);
 
 		List<SysPermission> permissions = sysPermissionMapper

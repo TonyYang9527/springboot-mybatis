@@ -42,6 +42,37 @@ public class RoleService {
 	}
 
 	/**
+	 * 创建 SysRole.
+	 * 
+	 * @param req
+	 * @return id
+	 */
+	public Long createSysRole(SysRole role) {
+		sysRoleMapper.insertSelective(role);
+		logger.info("createSysRole  role:{}", JSON.toJSONString(role));
+		// 后面加入缓存
+		return role.getId();
+	}
+
+	/**
+	 * 更新 SysRole
+	 * 
+	 * @param req
+	 * @return boolean
+	 */
+	public boolean updateSysRole(SysRole role) {
+
+		SysRoleExample example = new SysRoleExample();
+		SysRoleExample.Criteria c = example.createCriteria();
+		c.andIdEqualTo(role.getId());
+
+		logger.info("updateSysRole  role:{}", JSON.toJSONString(role));
+		sysRoleMapper.updateByExampleSelective(role, example);
+
+		return true;
+	}
+
+	/**
 	 * 根据id 删除 SysRole.
 	 * 
 	 * @param id
@@ -68,7 +99,6 @@ public class RoleService {
 
 		if (CollectionUtils.isEmpty(ids)) {
 			return new ArrayList<SysRole>();
-
 		}
 		SysRoleExample example = new SysRoleExample();
 		SysRoleExample.Criteria criteria = example.createCriteria();
@@ -80,7 +110,7 @@ public class RoleService {
 		criteria.andIdIn(values);
 
 		List<SysRole> roles = sysRoleMapper.selectByExample(example);
-		logger.info("getSysRoleById  ids:{},role:{}", JSON.toJSONString(ids),
+		logger.info("findSysRoleByIds  ids:{},role:{}", JSON.toJSONString(ids),
 				JSON.toJSONString(roles));
 		if (CollectionUtils.isEmpty(roles)) {
 			return new ArrayList<SysRole>();

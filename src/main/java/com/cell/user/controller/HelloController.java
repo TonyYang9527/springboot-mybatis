@@ -19,9 +19,14 @@ public class HelloController {
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name,
 			Model model) {
 		model.addAttribute("name", name);
-		logger.info("greeting  name:{},model:{}",
-				JSON.toJSONString(name), JSON.toJSONString(name));
+		logger.info("greeting  name:{},model:{}", JSON.toJSONString(name),
+				JSON.toJSONString(name));
 		return "hello";
+	}
+
+	@RequestMapping("/index")
+	public String index(Model model) {
+		return "index";
 	}
 
 }

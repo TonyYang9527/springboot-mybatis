@@ -23,7 +23,7 @@ public class AuthorityService {
 
 	/**
 	 * 根据主键获取SysAuthority.
-	 *
+	 * 
 	 * @param id
 	 *            the id
 	 * @return SysAuthority
@@ -91,7 +91,7 @@ public class AuthorityService {
 
 	/**
 	 * 根据主键获取SysAuthority.
-	 *
+	 * 
 	 * @param id
 	 *            the id
 	 * @return SysAuthority
@@ -100,13 +100,11 @@ public class AuthorityService {
 
 		SysAuthorityExample example = new SysAuthorityExample();
 		SysAuthorityExample.Criteria criteria = example.createCriteria();
-
 		if (userId != null) {
 			criteria.andUserIdEqualTo(userId);
 		}
 		List<SysAuthority> authorities = sysAuthorityMapper
 				.selectByExample(example);
-
 		logger.info("findSysAuthorityByUserId  userId:{},authorities:{}",
 				JSON.toJSONString(userId), JSON.toJSONString(authorities));
 		if (!CollectionUtils.isEmpty(authorities)) {

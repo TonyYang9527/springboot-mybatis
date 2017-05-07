@@ -1,11 +1,13 @@
 package com.cell.user.controller;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.cell.user.entiy.User;
 import com.cell.user.service.UserService;
 
@@ -15,19 +17,20 @@ import com.cell.user.service.UserService;
 @Controller
 public class UserController {
 
-    private Logger logger = Logger.getLogger(UserController.class);
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
+	@Autowired
+	private UserService userService;
 
-    @Autowired
-    private UserService userService;
+	@RequestMapping("/getUserInfo")
+	@ResponseBody
+	public User getUserInfo() {
+		User user = userService.getUserInfo();
+		if (user != null) {
+			System.out.println("user.getName():" + user.getName());
+			logger.info("user.getAge():" + user.getAge());
+		}
 
-    @RequestMapping("/getUserInfo")
-    @ResponseBody
-    public User getUserInfo() {
-        User user = userService.getUserInfo();
-        if(user!=null){
-            System.out.println("user.getName():"+user.getName());
-            logger.info("user.getAge():"+user.getAge());
-        }
-        return user;
-    }
+		logger.info("getUserInfo  user:{}", JSON.toJSONString(user));
+		return user;
+	}
 }

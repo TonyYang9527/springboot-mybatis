@@ -18,7 +18,6 @@ public class UserService {
 
     public User getUserInfo(){
         User user=userMapper.findUserInfo();
-        //User user=null;
         return user;
     }
 

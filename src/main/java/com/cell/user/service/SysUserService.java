@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSON;
+import com.cell.user.entiy.SysAuthority;
 import com.cell.user.entiy.SysUser;
 import com.cell.user.entiy.SysUserExample;
 import com.cell.user.mapper.SysUserMapper;
+import com.cell.user.util.TransformUtil;
+import com.cell.user.vo.UserAuthorityVo;
 
 @Service
 public class SysUserService {
@@ -24,6 +27,8 @@ public class SysUserService {
 	
 	@Autowired
 	protected SysUserMapper sysUserMapper;
+	@Autowired
+	protected AuthorityService authorityService;
 	/**
 	 * 根据主键获取SysUser.
 	 *
@@ -47,11 +52,18 @@ public class SysUserService {
 	 * @param req
 	 * @return id
 	 */
-	public Long createSysUser(SysUser user) {
+	public Long createSysUser(UserAuthorityVo vo) {
+		
+	   SysUser user = TransformUtil.transformSysUserForQuery(vo.getUser());
 		user.setCreatedTime(new Date());
 		user.setCreatedBy("admin");
-		sysUserMapper.insertSelective(user);
-		logger.info("createSysUser  user:{}", JSON.toJSONString(user));
+	   sysUserMapper.insertSelective(user);
+		
+		SysAuthority	authority =TransformUtil.transformSysAuthorityVoForQuery(vo.getAuthority()) ;
+		authority.setUserId(user.getId());
+	    authorityService.createSysAuthority(authority);
+		
+		logger.info("createSysUser  user:{},authority:{}", JSON.toJSONString(user),JSON.toJSONString(authority));
 		return user.getId();
 	}
 

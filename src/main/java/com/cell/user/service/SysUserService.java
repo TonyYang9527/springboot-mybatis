@@ -21,10 +21,9 @@ import com.cell.user.mapper.SysUserMapper;
 public class SysUserService {
 
 	private Logger logger = LoggerFactory.getLogger(SysUserService.class);
-
+	
 	@Autowired
 	protected SysUserMapper sysUserMapper;
-
 	/**
 	 * 根据主键获取SysUser.
 	 *
@@ -49,12 +48,10 @@ public class SysUserService {
 	 * @return id
 	 */
 	public Long createSysUser(SysUser user) {
-
 		user.setCreatedTime(new Date());
 		user.setCreatedBy("admin");
 		sysUserMapper.insertSelective(user);
 		logger.info("createSysUser  user:{}", JSON.toJSONString(user));
-		// 后面加入缓存
 		return user.getId();
 	}
 
@@ -66,11 +63,9 @@ public class SysUserService {
 	 * @return List<SysUser>
 	 */
 	public List<SysUser> findUserByIds(Set<Long> ids) {
-
 		if (CollectionUtils.isEmpty(ids)) {
 			return new ArrayList<SysUser>();
 		}
-
 		SysUserExample example = new SysUserExample();
 		SysUserExample.Criteria c = example.createCriteria();
 
@@ -128,7 +123,6 @@ public class SysUserService {
 	 * @return boolean
 	 */
 	public boolean deleteSysUserById(Long id) {
-
 		SysUserExample example = new SysUserExample();
 		SysUserExample.Criteria criteria = example.createCriteria();
 		criteria.andIdEqualTo(id);

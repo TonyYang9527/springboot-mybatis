@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.cell.user.entiy.SysUser;
+import com.cell.user.service.AuthorityService;
 import com.cell.user.service.SysUserService;
+import com.cell.user.util.TransformUtil;
 import com.cell.user.vo.UserAuthorityVo;
-import com.cell.user.vo.UserVo;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -22,6 +23,9 @@ public class SysUserController {
 	private Logger logger = LoggerFactory.getLogger(SysUserController.class);
 	@Autowired
 	private SysUserService sysUserService;
+
+	@Autowired
+	private AuthorityService authorityService;
 
 	@ResponseBody
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
@@ -33,18 +37,20 @@ public class SysUserController {
 
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createUser(String userAuthorityJson, boolean hasAuthority) {
+	public String createUser(String userAuthorityJson) {
 
 		if (StringUtils.isBlank(userAuthorityJson)) {
-			return null;
+			return "param error";
 		}
-		
 		UserAuthorityVo vo = JSON.parseObject(userAuthorityJson,
 				UserAuthorityVo.class);
-
-		if (vo == null) {
-			return null;
+		
+		if (vo == null || vo.getAuthority() == null || vo.getUser() == null) {
+			return "param error";
 		}
+		
+		SysUser sysUser = TransformUtil.transformSysUserForQuery(vo.getUser());
+		Long userId = sysUserService.createSysUser(sysUser);
 		
 		return JSON.toJSONString(vo);
 	}

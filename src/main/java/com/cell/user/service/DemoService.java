@@ -11,7 +11,7 @@ import com.cell.user.mapper.UserMapper;
  */
 
 @Service
-public class UserService {
+public class DemoService {
 
     @Autowired
     private UserMapper userMapper;

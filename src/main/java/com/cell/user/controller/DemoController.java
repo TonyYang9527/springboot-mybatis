@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.cell.user.entiy.User;
-import com.cell.user.service.UserService;
+import com.cell.user.service.DemoService;
 
 /**
  * Created by zl on 2015/8/27.
  */
 @Controller
-public class UserController {
+public class DemoController {
 
-	private Logger logger = LoggerFactory.getLogger(UserController.class);
+	private Logger logger = LoggerFactory.getLogger(DemoController.class);
 	@Autowired
-	private UserService userService;
+	private DemoService userService;
 
 	@RequestMapping("/getUserInfo")
 	@ResponseBody

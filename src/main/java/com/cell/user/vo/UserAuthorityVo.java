@@ -6,22 +6,23 @@ public class UserAuthorityVo implements Serializable {
 
 	private static final long serialVersionUID = 8714264418954323189L;
 
-	private UserVo user;
-	private AuthorityVo authority;
+	private SysUserVo user;
+	
+	private SysAuthorityVo authority;
 
-	public UserVo getUser() {
+	public SysUserVo getUser() {
 		return user;
 	}
 
-	public void setUser(UserVo user) {
+	public void setUser(SysUserVo user) {
 		this.user = user;
 	}
 
-	public AuthorityVo getAuthority() {
+	public SysAuthorityVo getAuthority() {
 		return authority;
 	}
 
-	public void setAuthority(AuthorityVo authority) {
+	public void setAuthority(SysAuthorityVo authority) {
 		this.authority = authority;
 	}
 

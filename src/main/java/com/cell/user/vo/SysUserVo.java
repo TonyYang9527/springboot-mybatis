@@ -3,20 +3,32 @@ package com.cell.user.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserVo implements Serializable {
+public class SysUserVo implements Serializable {
 
-	private static final long serialVersionUID = 1226920360060105291L;
+	private static final long serialVersionUID = 2848457720219581270L;
+
 	private Long id;
+
 	private String username;
+
 	private String email;
+
 	private String mobile;
+
 	private String password;
+
 	private String salt;
+
 	private String device;
+
 	private Boolean status;
+
 	private Boolean deleted;
+
 	private Boolean admin;
+
 	private Date createdTime;
+
 	private String createdBy;
 
 	public Long getId() {
@@ -32,7 +44,7 @@ public class UserVo implements Serializable {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username == null ? null : username.trim();
 	}
 
 	public String getEmail() {
@@ -40,7 +52,7 @@ public class UserVo implements Serializable {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = email == null ? null : email.trim();
 	}
 
 	public String getMobile() {
@@ -48,7 +60,7 @@ public class UserVo implements Serializable {
 	}
 
 	public void setMobile(String mobile) {
-		this.mobile = mobile;
+		this.mobile = mobile == null ? null : mobile.trim();
 	}
 
 	public String getPassword() {
@@ -56,7 +68,7 @@ public class UserVo implements Serializable {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = password == null ? null : password.trim();
 	}
 
 	public String getSalt() {
@@ -64,7 +76,7 @@ public class UserVo implements Serializable {
 	}
 
 	public void setSalt(String salt) {
-		this.salt = salt;
+		this.salt = salt == null ? null : salt.trim();
 	}
 
 	public String getDevice() {
@@ -72,7 +84,7 @@ public class UserVo implements Serializable {
 	}
 
 	public void setDevice(String device) {
-		this.device = device;
+		this.device = device == null ? null : device.trim();
 	}
 
 	public Boolean getStatus() {
@@ -112,7 +124,6 @@ public class UserVo implements Serializable {
 	}
 
 	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+		this.createdBy = createdBy == null ? null : createdBy.trim();
 	}
-	
 }

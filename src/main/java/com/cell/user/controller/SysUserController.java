@@ -6,12 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.fastjson.JSON;
+import com.cell.user.condition.ListSysUserCondition;
 import com.cell.user.entiy.SysUser;
+import com.cell.user.page.Page;
+import com.cell.user.page.PageResult;
 import com.cell.user.service.SysUserService;
+import com.cell.user.vo.SysUserVo;
 import com.cell.user.vo.UserAuthorityVo;
 
 @Controller
@@ -43,5 +48,13 @@ public class SysUserController {
 		}
 		Long userId = sysUserService.createSysUser(vo);
 		return JSON.toJSONString(userId);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	public PageResult<SysUserVo> listSysUser(
+			@RequestParam(value = "condition") ListSysUserCondition condition,
+			@RequestParam(value = "page") Page page) {
+		return sysUserService.listSysUser(condition, page);
 	}
 }

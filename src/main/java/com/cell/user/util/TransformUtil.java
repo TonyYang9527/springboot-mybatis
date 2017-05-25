@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 public class TransformUtil {
 
 
-	public static SysUser transformSysUserForQuery(SysUserVo user) {
+	public static SysUser transformSysUser(SysUserVo user) {
 		SysUser result = new SysUser();
 		if (user == null)
 			return null;
@@ -44,7 +44,7 @@ public class TransformUtil {
 	}
 
 
-	public static SysAuthority transformSysAuthorityVoForQuery(
+	public static SysAuthority transformSysAuthority(
 			SysAuthorityVo authority) {
 
 		SysAuthority result = new SysAuthority();

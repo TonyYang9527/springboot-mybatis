@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,57 +18,87 @@ import com.alibaba.fastjson.JSON;
 import com.cell.user.entiy.SysAuthority;
 import com.cell.user.entiy.SysUser;
 import com.cell.user.entiy.SysUserExample;
+import com.cell.user.mapper.SysAuthorityMapper;
 import com.cell.user.mapper.SysUserMapper;
 import com.cell.user.util.TransformUtil;
 import com.cell.user.vo.UserAuthorityVo;
 
 @Service
-public class SysUserService {
-
+public class SysUserService
+{
+	
 	private Logger logger = LoggerFactory.getLogger(SysUserService.class);
 	
 	@Autowired
 	protected SysUserMapper sysUserMapper;
-	@Autowired
-	protected AuthorityService authorityService;
+	@Resource
+	protected SysAuthorityMapper sysAuthorityMapper;
+	
 	/**
 	 * 根据主键获取SysUser.
-	 *
+	 * 
 	 * @param id
 	 *            the id
 	 * @return SysUser
 	 */
-	public SysUser findUserById(Long id) {
+	public SysUser findUserById(Long id)
+	{
 		SysUser user = sysUserMapper.selectByPrimaryKey(id);
-		logger.info("getSysUserById  id:{},user:{}", JSON.toJSONString(id),
-				JSON.toJSONString(user));
-		if (user != null) {
+		logger.info("getSysUserById  id:{},user:{}", JSON.toJSONString(id), JSON.toJSONString(user));
+		if (user != null)
+		{
 			return user;
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 创建 SysUser.
 	 * 
 	 * @param req
 	 * @return id
 	 */
-	public Long createSysUser(UserAuthorityVo vo) {
+	public Long createSysUser(UserAuthorityVo vo)
+	{
 		
-	   SysUser user = TransformUtil.transformSysUserForQuery(vo.getUser());
+		SysUser user = TransformUtil.transformSysUser(vo.getUser());
 		user.setCreatedTime(new Date());
 		user.setCreatedBy("admin");
-	   sysUserMapper.insertSelective(user);
+		sysUserMapper.insertSelective(user);
 		
-		SysAuthority	authority =TransformUtil.transformSysAuthorityVoForQuery(vo.getAuthority()) ;
+		SysAuthority authority = TransformUtil.transformSysAuthority(vo.getAuthority());
 		authority.setUserId(user.getId());
-	    authorityService.createSysAuthority(authority);
+		sysAuthorityMapper.insertSelective(authority);
 		
-		logger.info("createSysUser  user:{},authority:{}", JSON.toJSONString(user),JSON.toJSONString(authority));
+		logger.info("createSysUser  user:{},authority:{}", JSON.toJSONString(user), JSON.toJSONString(authority));
 		return user.getId();
 	}
-
+	
+	/**
+	 * 更新 SysUser.
+	 * 
+	 * @param req
+	 * @return id
+	 */
+	public Long updateSysUser(UserAuthorityVo vo)
+	{
+		SysUser user = TransformUtil.transformSysUser(vo.getUser());
+		SysUser sysuser = sysUserMapper.selectByPrimaryKey(user.getId());
+		if (sysuser != null)
+		{
+			sysUserMapper.updateByPrimaryKeySelective(user);
+		}
+		
+		SysAuthority authority = TransformUtil.transformSysAuthority(vo.getAuthority());
+		SysAuthority sysAuthority = sysAuthorityMapper.selectByPrimaryKey(authority.getId());
+		if (sysAuthority != null)
+		{
+			sysAuthorityMapper.updateByPrimaryKeySelective(authority);
+		}
+		logger.info("updateSysUser  user:{},authority:{}", JSON.toJSONString(user), JSON.toJSONString(authority));
+		return user.getId();
+	}
+	
 	/**
 	 * 根据主键获取 List<SysUser>.
 	 * 
@@ -74,67 +106,99 @@ public class SysUserService {
 	 *            <Long> ids
 	 * @return List<SysUser>
 	 */
-	public List<SysUser> findUserByIds(Set<Long> ids) {
-		if (CollectionUtils.isEmpty(ids)) {
+	public List<SysUser> findUserByIds(Set<Long> ids)
+	{
+		if (CollectionUtils.isEmpty(ids))
+		{
 			return new ArrayList<SysUser>();
 		}
 		SysUserExample example = new SysUserExample();
 		SysUserExample.Criteria c = example.createCriteria();
-
+		
 		List<Long> values = new ArrayList<Long>(ids.size());
-		for (Long id : ids) {
+		for (Long id : ids)
+		{
 			values.add(id);
 		}
 		c.andIdIn(values);
-
+		
 		List<SysUser> users = sysUserMapper.selectByExample(example);
-		logger.info("findUserByIds  ids:{},users:{}", JSON.toJSONString(ids),
-				JSON.toJSONString(users));
-		if (CollectionUtils.isEmpty(users)) {
+		logger.info("findUserByIds  ids:{},users:{}", JSON.toJSONString(ids), JSON.toJSONString(users));
+		if (CollectionUtils.isEmpty(users))
+		{
 			return new ArrayList<SysUser>();
 		}
 		return users;
 	}
-
+	
 	/**
 	 * 根据username获取SysUser.
-	 *
+	 * 
 	 * @param username
 	 * @return SysUser
 	 */
-	public SysUser getSysUserByOther(String username, String email,
-			String mobile) {
-
+	public SysUser getSysUserByOther(String username, String email, String mobile)
+	{
 		SysUserExample example = new SysUserExample();
 		SysUserExample.Criteria c = example.createCriteria();
-		if (StringUtils.isNotEmpty(username)) {
+		if (StringUtils.isNotEmpty(username))
+		{
 			c.andUsernameEqualTo(username);
 		}
-		if (StringUtils.isNotEmpty(email)) {
+		if (StringUtils.isNotEmpty(email))
+		{
 			c.andEmailEqualTo(email);
 		}
-		if (StringUtils.isNotEmpty(mobile)) {
+		if (StringUtils.isNotEmpty(mobile))
+		{
 			c.andMobileEqualTo(mobile);
 		}
 		List<SysUser> users = sysUserMapper.selectByExample(example);
-		logger.info(
-				"getSysUserByOther  username:{}, email:{}, mobile:{},users:{}",
-				JSON.toJSONString(username), JSON.toJSONString(email),
-				JSON.toJSONString(mobile), JSON.toJSONString(users));
-
-		if (CollectionUtils.isNotEmpty(users) && users.size() == 1) {
+		logger.info("getSysUserByOther  username:{}, email:{}, mobile:{},users:{}", JSON.toJSONString(username), JSON
+		                .toJSONString(email), JSON.toJSONString(mobile), JSON.toJSONString(users));
+		
+		if (CollectionUtils.isNotEmpty(users) && users.size() == 1)
+		{
 			return users.get(0);
 		}
 		return null;
 	}
+	
 
+	
+	/**
+	 * 根据id 更新SysUser状态.
+	 * 
+	 * @param id
+	 * @return boolean
+	 */
+	public boolean updateStatusById(Long id, Boolean status)
+	{
+		SysUserExample example = new SysUserExample();
+		SysUserExample.Criteria criteria = example.createCriteria();
+		criteria.andIdEqualTo(id);
+		criteria.andStatusEqualTo(!status);// 多种状态:注意状态迁移
+		List<SysUser> users = sysUserMapper.selectByExample(example);
+		
+		if (CollectionUtils.isNotEmpty(users) && users.size() == 1)
+		{
+			SysUser user = new SysUser();
+			user.setId(id);
+			user.setStatus(status);
+			sysUserMapper.updateByPrimaryKeySelective(user);
+		}
+		logger.info("updateStatusById  id:{},status:{}", JSON.toJSONString(id), JSON.toJSONString(status));
+		return true;
+	}
+	
 	/**
 	 * 根据id 删除 SysUser.
 	 * 
 	 * @param id
 	 * @return boolean
 	 */
-	public boolean deleteSysUserById(Long id) {
+	public boolean deleteSysUserById(Long id)
+	{
 		SysUserExample example = new SysUserExample();
 		SysUserExample.Criteria criteria = example.createCriteria();
 		criteria.andIdEqualTo(id);
@@ -142,5 +206,4 @@ public class SysUserService {
 		sysUserMapper.deleteByExample(example);
 		return true;
 	}
-
 }

@@ -63,12 +63,14 @@ public class SysUserService {
 	public Long createSysUser(UserAuthorityVo vo) {
 
 		SysUser user = TransformUtil.transformSysUser(vo.getUser());
+		user.setId(null);
 		user.setCreatedTime(new Date());
 		user.setCreatedBy("admin");
 		sysUserMapper.insertSelective(user);
 
 		SysAuthority authority = TransformUtil.transformSysAuthority(vo
 				.getAuthority());
+		authority.setId(null);
 		authority.setUserId(user.getId());
 		sysAuthorityMapper.insertSelective(authority);
 
@@ -213,6 +215,7 @@ public class SysUserService {
 		if (page != null && page.isNeedTotalRecord()) {
 			int totalRecord = countSysUser(condition);
 			page.setTotalRecord(totalRecord);
+			// nodata
 			if (totalRecord == 0) {
 				PageResult<SysUserVo> result = new PageResult<SysUserVo>();
 				result.setResult(new ArrayList<SysUserVo>());

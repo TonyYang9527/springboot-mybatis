@@ -31,9 +31,9 @@ public class Application {
 		return new org.apache.tomcat.jdbc.pool.DataSource();
 	}
 
+	/*****加载mybatis的文件*****/
 	@Bean
 	public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
-
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource());
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

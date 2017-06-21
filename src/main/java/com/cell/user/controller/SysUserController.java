@@ -16,6 +16,7 @@ import com.cell.user.entiy.SysUser;
 import com.cell.user.page.Page;
 import com.cell.user.page.PageResult;
 import com.cell.user.service.SysUserService;
+import com.cell.user.util.RetCodeConst;
 import com.cell.user.vo.SysUserVo;
 import com.cell.user.vo.UserAuthorityVo;
 
@@ -56,5 +57,22 @@ public class SysUserController {
 			@RequestParam(value = "condition") ListSysUserCondition condition,
 			@RequestParam(value = "page") Page page) {
 		return sysUserService.listSysUser(condition, page);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String updateUser(String userAuthorityJson) {
+		
+		if (StringUtils.isBlank(userAuthorityJson)) {
+			return RetCodeConst.FAIL;
+		}
+		UserAuthorityVo vo = JSON.parseObject(userAuthorityJson,
+				UserAuthorityVo.class);
+		if (vo == null) {
+			return RetCodeConst.FAIL;
+		}
+		 sysUserService.updateSysUser(vo);
+		 
+		return RetCodeConst.SUCCESS;
 	}
 }

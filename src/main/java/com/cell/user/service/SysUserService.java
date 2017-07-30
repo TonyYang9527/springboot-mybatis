@@ -86,6 +86,7 @@ public class SysUserService {
 	 * @return id
 	 */
 	public Long updateSysUser(UserAuthorityVo vo) {
+		
 		SysUser user = TransformUtil.transformSysUser(vo.getUser());
 		SysUser sysuser = sysUserMapper.selectByPrimaryKey(user.getId());
 		if (sysuser != null) {

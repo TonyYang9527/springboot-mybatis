@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +39,8 @@ public class SysUserController {
 
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createUser(String userAuthorityJson) {
+	public String createUser(@RequestBody String userAuthorityJson) {
+		logger.info("createUser  user:{}", userAuthorityJson);
 		if (StringUtils.isBlank(userAuthorityJson)) {
 			return "param error";
 		}
@@ -62,7 +64,7 @@ public class SysUserController {
 	@ResponseBody
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String updateUser(String userAuthorityJson) {
-		
+
 		if (StringUtils.isBlank(userAuthorityJson)) {
 			return RetCodeConst.FAIL;
 		}
@@ -71,8 +73,7 @@ public class SysUserController {
 		if (vo == null) {
 			return RetCodeConst.FAIL;
 		}
-		 sysUserService.updateSysUser(vo);
-		 
+		sysUserService.updateSysUser(vo);
 		return RetCodeConst.SUCCESS;
 	}
 }

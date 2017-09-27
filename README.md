@@ -18,3 +18,16 @@
 除了以上的原因可能导致 ActionBar 获取为空的话，还有其他的原因导致 getActionBar() 获取失败，例如我在网上查找的时候，有人的项目是在Android SDK 2.2上新建的，当他使用 ActionBar 的时候将 AndroidManifest.xml 中的 minSdkVersion设置为11后()，发现 getActionBar() 获取失败是因为项目中没有 res/values-v11和res/values-v14和其中的style.xml文件，我最近遇到的 getActionBar() 为null是在 Eclipse 中导入了一个别人发给我的项目，但是在他的电脑上编译运行的apk getActionBar(), 但在我的电脑上则不行，试了上面的几种方法也不行，最后，我把这个项目导入到了 Android Studio 中，终于可以正常运行了。
 如果大家有其他的有关 getActionBar() 为null的问题，方法和经验，欢迎讨论交流。
 
+#########################################################
+
+先看看你的工程中有没有values-v11或者v14的包，没有的话就去其他工程中copy一份过来。
+然后排出以下几点：
+1.活动类及其父类中，不要设置为全屏：
+//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
+2.配置清单中，添加的主题：
+android:theme="@style/AppTheme" >  
+其父主题要具有ActionBar，例如：
+<style name="AppTheme" parent="@android:style/Theme.Holo.Light">  
+3.getActionBar()写在setContentView()后面。
+
+
